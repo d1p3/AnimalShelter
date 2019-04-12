@@ -1,0 +1,86 @@
+CREATE TABLE `Profile` (
+  `profile_id` char(10) NOT NULL,
+  `First_name` varchar(50) NOT NULL,
+  `Last_name` varchar(50) NOT NULL,
+  `Username` varchar(50) NOT NULL UNIQUE,
+  `Email` varchar(50) NOT NULL UNIQUE,
+  `Password` varchar(20) NOT NULL,
+  `Mobile_number` varchar(10) NOT NULL UNIQUE,
+  `DateCreated` date NOT NULL,
+  `IsActive` int(11) NOT NULL
+); 
+
+CREATE TABLE `Admin` 
+( 
+  `AdminID` char(10), 
+  `Username` varchar(50), 
+  FOREIGN KEY (`AdminID`) REFERENCES `Profile`(`profile_id`) ON DELETE SET NULL,
+  FOREIGN KEY (`Username`) REFERENCES `Profile`(`Username`) ON DELETE SET NULL
+);
+
+
+CREATE TABLE `User` 
+( 
+  `User_id` char(10), 
+  `Username` varchar(50), 
+  FOREIGN KEY (`AdminID`) REFERENCES `Profile`(`profile_id`) ON DELETE SET NULL,
+  FOREIGN KEY (`Username`) REFERENCES `Profile`(`Username`) ON DELETE SET NULL
+);
+
+CREATE TABLE ANIMAL (
+    Animal_id char(10) primary key,
+    Name varchar(50) not null,
+    Age int not null,
+    Type varchar(50) NOT null,
+    Color varchar(50),
+    Availability varchar(10) NOT NULL,
+    Size varchar(10),
+    Description varchar(100),
+    Num_Likes int NOT NULL,
+    Ported_date date,
+	Breed_id varchar(30),
+	Foreign key (Breed_id) references BREED(Breed_id)
+	ON DELETE SET NULL
+  );
+CREATE TABLE BREED (
+	Breed_id varchar(10) primary key,
+	Breed char(30) NOT NULL UNIQUE
+);
+CREATE TABLE ADOPTION (
+	Adoption_id varchar(10) primary key,
+	Adoption_fee Int NOT NULL,
+	Payment_method varchar(30),
+	User_id varchar(10),
+	Animal_id varchar(10),
+Foreign key (User_id) references User(User_id) ON DELETE SET NULL ON UPDATE SET NULL,
+Foreign key (ANIMAL_id) references ANIMAL(Animal_id) ON DELETE SET NULL ON UPDATE SET NULL
+
+);
+CREATE TABLE LIKES(
+	User_id varchar(10),
+	Animal_id varchar(10),
+Foreign key (User_id) references User(User_id) ON DELETE SET NULL ON UPDATE SET NULL,
+Foreign key (ANIMAL_id) references ANIMAL(Animal_id) ON DELETE SET NULL ON UPDATE SET NULL
+
+);
+CREATE TABLE DONATIONS (
+    User_id char(10),
+    Animal_id varchar(50),
+    DonationID char(10) NOT NULL PRIMARY KEY,
+    Amount varchar(10) NOT NULL,
+    Payment_Method varchar(30) NOT NULL,
+    Foreign key (User_id) references User(User_id) ON DELETE SET NULL ON UPDATE SET NULL,
+    Foreign key (ANIMAL_id) references ANIMAL(Animal_id) ON DELETE SET NULL ON UPDATE SET NULL
+	);
+
+CREATE TABLE INQUIRIES (
+    User_id char(10),
+    Animal_id char(10),
+    Response varchar(1000) NOT NULL,
+    Inquire_id char(10) NOT NULL PRIMARY Key,
+    Message varchar(1000) NOT NULL,
+    Assign_Admin_ID char(10),
+	Foreign key (User_id) references User(User_id) ON DELETE SET NULL ON UPDATE SET NULL,
+	Foreign key (ANIMAL_id) references ANIMAL(Animal_id) ON DELETE SET NULL ON UPDATE SET NULL,
+    Foreign key (Assign_Admin_ID) references Admin(AdminID) ON DELETE SET NULL ON UPDATE SET NULL
+);
